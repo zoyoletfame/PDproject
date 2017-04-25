@@ -34,37 +34,55 @@ public class DialysisServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8"); 
-        String start = request.getParameter("timeStartInput1");     
-        String end = request.getParameter("timeEndInput1");  
+        response.setContentType("text/html;charset=UTF-8");
+        String startIn = request.getParameter("timeStartInput");
+        String endIn = request.getParameter("timeEndInput");
         Object userId = request.getSession().getAttribute("userId");
-    
-        try{       
+        String startOut = request.getParameter("timeStartOut");
+        String endOut = request.getParameter("timeEndOut");
+        String urinate = request.getParameter("urinate");
+        String date = request.getParameter("date");
+
+        try {
+            //parse string to date 
             SimpleDateFormat sf = new SimpleDateFormat("HH:mm");
-            Date dateSta = sf.parse(start);
-            Date dateEnd = sf.parse(end);
-            int cap = Integer.parseInt(request.getParameter("capacityInput1"));    
-            TestDateTime tdt = new TestDateTime();  
-            List<TestDateTime> td = tdt.collectRoundId();
-            int lastArray = td.size()-1;                
-            Dialysis dia = new Dialysis();  
-            dia.getRecordIn(cap, dateSta, dateEnd ,td.get(lastArray).getRoundId());    
+            SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");
+            Date recDate = s.parse(date);
             int userIds = Integer.parseInt(userId.toString());
-            tdt = tdt.showDate(userIds);
-            request.setAttribute("showDate",tdt.chageDate(tdt.getDate()));
-            
+            // select roundID
+            TestDateTime tdt = TestDateTime.collectRoundId(recDate, userIds);
+            //insert data
+            if (startOut.isEmpty()) {
+                Date dateInSta = sf.parse(startIn);
+                Date dateInEnd = sf.parse(endIn);
+                int capIn = Integer.parseInt(request.getParameter("capacityInput"));
+                Dialysis dia = new Dialysis();
+                dia.getRecordIn(capIn, dateInSta, dateInEnd, tdt.getRoundId());             
+                System.out.println("fdsf");
+            } else {
+                System.out.println("fdsfffffffffff");
+                Date dateOutSta = sf.parse(startOut);
+                Date dateOutEnd = sf.parse(endOut);
+                int capOut = Integer.parseInt(request.getParameter("capacityOutput"));
+                int urinateInt = Integer.parseInt(urinate);
+                Dialysis.getRecordOut(capOut, dateOutSta, dateOutEnd, urinateInt, userIds, recDate);
+                
+            }
+            //show date 
+            request.setAttribute("roundId", tdt.getRoundId());
+            request.setAttribute("showDate", TestDateTime.chageDate(recDate));        
             getServletContext().getRequestDispatcher("/ShowDate.jsp").forward(request, response);
-            
-        }catch(IOException e){           
+
+        } catch (IOException e) {
             System.out.println(e);
-        }catch(ParseException e){       
+        } catch (ParseException e) {
             System.out.println(e);
-        }catch(NumberFormatException e){
+        } catch (NumberFormatException e) {
             System.out.println(e);
-        }catch(ServletException e){
+        } catch (ServletException e) {
             System.out.println(e);
         }
-        
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

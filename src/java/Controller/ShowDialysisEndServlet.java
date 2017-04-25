@@ -37,18 +37,25 @@ public class ShowDialysisEndServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         Object userId = request.getSession().getAttribute("userId");
+        String roundId = request.getParameter("roundId");
+        
         try{       
-            int userID = Integer.parseInt(userId.toString());                 
-            TestDateTime td = new TestDateTime().showDate(userID);
-            TestDateTime ts = new TestDateTime().getRoundValue(userID, td.getDate());
-            Dialysis dia = new Dialysis().showRecord(userID,td.getDate());  
+            int rId = Integer.parseInt(roundId);
+            int userID = Integer.parseInt(userId.toString());   
+            
+            TestDateTime td = TestDateTime.showDate(userID,rId);
+            Dialysis dia = Dialysis.showRecord(userID,td.getDate());  
+            request.setAttribute("rId", roundId);
+            request.setAttribute("dates", td.getDate());
+            
             request.setAttribute("volIn", dia.getVolDiaIn());
             request.setAttribute("timeIn_start", dia.getTimeDiaIn_start());
             request.setAttribute("timeIn_end", dia.getTimeDiaIn_end());
-            request.setAttribute("round", ts.getRound());
+           
             // set round ไปหน้า record Dialysis         
+          
             getServletContext().getRequestDispatcher("/recordDialysis.jsp").forward(request, response);
-        }catch(Exception e){
+        }catch(NumberFormatException e){
             System.out.println(e);
         }
        

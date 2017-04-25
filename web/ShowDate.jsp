@@ -13,13 +13,16 @@
     </head>
     <body>
         <form action = "/SeniorProject/ShowDialysisEndServlet">
-            <p><a href="/SeniorProject/ShowDialysisEndServlet" ><%=request.getAttribute("showDate")%></a><p>
-                <input type="submit" value="fs">
+            <input type="hidden" name="roundId" value="${roundId}">
+            
+            <p><a href="Home.jsp">HOME</a>
+            <p><%=request.getAttribute("showDate")%><p> <input type="submit" value="น้ำเข้า">
+            <p><a href="/SeniorProject/recordTableServlet">ดูประวัติ</a> 
+            
         <br>
         </form>     
-         <%
-                Object d = request.getSession().getAttribute("userId");
-                out.print(d);
-         %>
+         
+          
+           
     </body>
 </html>

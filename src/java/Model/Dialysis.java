@@ -30,12 +30,11 @@ public class Dialysis {
     private int profit;
     private int totalProfit;
     private int weight;
-    private String bloodPressure;  
+    private String bloodPressure;
     private String desDiaLiquid;
     private int round_Id;
     private int round;
     private Date date;
-   
 
     public Dialysis() {
     }
@@ -62,6 +61,39 @@ public class Dialysis {
         this.urinate = urinate;
     }
 
+    public static int eachProfit(int volIn, int volOut) {
+        int profit;
+        profit = volIn - volOut;
+        return profit;
+    }
+
+    public static int totalsProfit(int profit) {
+        int total = 0;
+        total += profit;
+        return total;
+    }
+
+    public static Dialysis updateProfit(int profit, int total, int userId, Date recDate) {
+        Dialysis dia = null;
+        try {
+            Connection con = ConnectionBuilder.getConnection();
+            String sql = "update dialysis set profit = ? , total = ? "
+                    + " JOIN record ON dialysis.record_recId_fk = record.recId "
+                    + " JOIN patient ON record.patient_patId_fk = patient.patId "
+                    + " where patId = ? and recDate = ? ";
+            PreparedStatement pstm = con.prepareStatement(sql);
+            pstm.setInt(1, profit);
+            pstm.setInt(2, total);
+            pstm.setInt(5, userId);
+            pstm.setDate(6, new java.sql.Date(recDate.getTime()));
+            int rs = pstm.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return dia;
+    }
+
     public Boolean getRecordIn(int volDiaIn, Date timeDiaIn_start, Date timeDiaIn_end, int roundId) { //insert data to DB
 
         try {
@@ -79,8 +111,31 @@ public class Dialysis {
         }
         return true;
     }
-   
-    public Dialysis showRecord(int userId, Date d) { //show record after click date
+    public static Boolean getRecordOut(int volDiaOut, Date timeDiaOut_start, Date timeDiaOut_end, int urinate, int userId, Date recDate) { //insert data to DB
+
+        try {
+            Connection con = ConnectionBuilder.getConnection();
+            String sql = "update dialysis "
+                    + " JOIN record ON dialysis.record_recId_fk = record.recId "
+                    + " JOIN patient ON record.patient_patId_fk = patient.patId "
+                    + " set volDiaOut = ? , timeDiaOut_start = ? ,timeDiaOut_end = ? , urinate = ? "
+                    + " where patId = ? and recDate = ? ";
+            PreparedStatement pstm = con.prepareStatement(sql);
+            pstm.setInt(1, volDiaOut);
+            pstm.setTime(2, new java.sql.Time(timeDiaOut_start.getTime()));
+            pstm.setTime(3, new java.sql.Time(timeDiaOut_end.getTime()));
+            pstm.setInt(4, urinate);
+            pstm.setInt(5, userId);
+            pstm.setDate(6, new java.sql.Date(recDate.getTime()));
+            int rs = pstm.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return true;
+    }
+
+    public static Dialysis showRecord(int userId, Date d) { //show record after click date
         Dialysis dia = null;
         try {
             Connection con = ConnectionBuilder.getConnection();
@@ -104,9 +159,10 @@ public class Dialysis {
         }
         return dia;
     }
+    
      public static void main(String[] args) throws ParseException {
         SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-        String dat = "2017-04-05";
+        
         List<Dialysis> dia = showRecordTable(1);
          for (int i = 0; i < dia.size()-1; i++) {
              System.out.println(dia.get(i));
@@ -124,11 +180,11 @@ public class Dialysis {
                     + " join patient on record.patient_patId_fk = patient.patId "
                     + " WHERE patId = ? "
                     + " ORDER BY recDate DESC ";
-            PreparedStatement pstm = con.prepareCall(sql);
+            PreparedStatement pstm = con.prepareStatement(sql);
             pstm.setInt(1, userId);
             ResultSet rs = pstm.executeQuery();
             while (rs.next()) {
-                Dialysis dia = new Dialysis();               
+                Dialysis dia = new Dialysis();
                 dia.setVolDiaIn(rs.getInt("volDiaIn"));
                 dia.setTimeDiaIn_start(rs.getTime("timeDiaIn_start"));
                 dia.setTimeDiaIn_end(rs.getTime("timeDiaIn_end"));
@@ -140,13 +196,13 @@ public class Dialysis {
                 dia.setDesDiaLiquid(rs.getString("desDiaLiquid"));
                 dia.setDate(rs.getDate("recDate"));
                 dia.setRound(rs.getInt("recRound"));
-                
+
                 if (diaAll == null) {
                     diaAll = new ArrayList<>();
                 }
-                
+
                 diaAll.add(dia);
-               
+
             }
         } catch (SQLException e) {
             System.out.println(e);
@@ -238,18 +294,23 @@ public class Dialysis {
     public int getProfit() {
         return profit;
     }
+
     public int getWeight() {
         return weight;
     }
+
     public String getBloodPressure() {
         return bloodPressure;
     }
+
     public void setProfit(int profit) {
         this.profit = profit;
     }
+
     public void setWeight(int weight) {
         this.weight = weight;
     }
+
     public void setBloodPressure(String bloodPressure) {
         this.bloodPressure = bloodPressure;
     }
@@ -274,5 +335,5 @@ public class Dialysis {
     public String toString() {
         return "Dialysis{" + ", volDiaIn=" + volDiaIn + ", volDiaOut=" + volDiaOut + ", timeDiaIn_start=" + timeDiaIn_start + ", timeDiaIn_end=" + timeDiaIn_end + ", timeDiaOut_start=" + timeDiaOut_start + ", timeDiaOut_end=" + timeDiaOut_end + ", urinate=" + urinate + ", profit=" + profit + ", totalProfit=" + totalProfit + ", weight=" + weight + ", bloodPressure=" + bloodPressure + ", desDiaLiquid=" + desDiaLiquid + ", round_Id=" + round_Id + ", round=" + round + ", date=" + date + '}';
     }
-    
+
 }

@@ -28,6 +28,10 @@
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>Controller.LoginServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>recordTableServlet</servlet-name>
+        <servlet-class>Controller.recordTableServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>DialysisServlet</servlet-name>
         <url-pattern>/DialysisServlet</url-pattern>
@@ -55,6 +59,10 @@
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>recordTableServlet</servlet-name>
+        <url-pattern>/recordTableServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -54,7 +54,9 @@ public final class Home_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("        <p><a href =\"Login.jsp\">Login</a></p><br>\n");
       out.write("        <p><a href =\"Register.jsp\">Register</a></p>\n");
       out.write("        <p><a href =\"CreateRecord.jsp\">สร้าง</a></p>\n");
-      out.write("        <p><a href =\"recoardTable.jsp\">ดูประวัติ</a></p>\n");
+      out.write("        <form action=\"/SeniorProject/recordTableServlet\">\n");
+      out.write("        <p><a href =\"/SeniorProject/recordTableServlet\">ดูประวัติ</a></p>\n");
+      out.write("        </form>\n");
       out.write("          ");
 
                 Object d = request.getSession().getAttribute("userId");

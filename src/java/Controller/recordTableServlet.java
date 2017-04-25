@@ -6,24 +6,19 @@
 package Controller;
 
 import Model.Dialysis;
-import Model.Patient;
-import Model.TestDateTime;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.jboss.weld.servlet.SessionHolder;
 
 /**
  *
  * @author Fame
  */
-public class RoundServ extends HttpServlet {
+public class recordTableServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,27 +32,15 @@ public class RoundServ extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-        String date = request.getParameter("date");
-        Object rId = request.getSession().getAttribute("userId");
-   
-        try {        
-            Date date2 = sf.parse(date);
-            int r = Integer.parseInt(request.getParameter("roundSelect"));
-            TestDateTime rud = new TestDateTime();
-            int rIds = Integer.parseInt(rId.toString());
-            for (int i = 1; i <= r; i++) {
-                rud.insertRound(i, date2 ,rIds);
-            }   
-            request.setAttribute("round", r);
-            request.setAttribute("date", date);
-            
-           
-            getServletContext().getRequestDispatcher("/recordDialysis.jsp").forward(request, response);
-           } catch (ParseException e) {
+        Object id = request.getSession().getAttribute("userId");
+        try{
+            int userId = Integer.parseInt(id.toString());
+            List<Dialysis> dia = Dialysis.showRecordTable(userId);
+            request.setAttribute("dia", dia);
+            getServletContext().getRequestDispatcher("/recordTable.jsp").forward(request, response);
+        }catch(NumberFormatException e){
             System.out.println(e);
         }
-        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

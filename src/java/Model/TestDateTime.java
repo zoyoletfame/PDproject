@@ -78,14 +78,7 @@ public class TestDateTime {
     @Override
     public String toString() {
         return "TestDateTime{" + "roundId=" + roundId + ", round=" + round + "Date " + date + '}';
-    }/*
-    public static void main(String[] args) throws ParseException {
-        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-        String s = "2017-04-05";
-        Date d = sf.parse(s);
-        TestDateTime t = getRoundValue(1, d);
-        System.out.println(t.getRound());
-    }*/
+    }
     
     public TestDateTime getRoundValue(int userId , Date dateRound) {
         TestDateTime tdt = null;
@@ -107,30 +100,30 @@ public class TestDateTime {
         }
         return tdt;
     }
-
-    public List<TestDateTime> collectRoundId() { // show roundID
-        List<TestDateTime> t = null;
+    
+  
+    public static TestDateTime collectRoundId(Date d , int userID) { // show roundID
+       TestDateTime tdt = null;
         try {
             Connection con = ConnectionBuilder.getConnection();
-            String sql = "select recId from record where recRound = 1";
+            String sql = "select recId from record join patient on record.patient_patId_fk = patient.patId "
+                    + "where recDate = ? and patId = ? ";
             PreparedStatement pstm = con.prepareStatement(sql);
+            pstm.setDate(1, new java.sql.Date(d.getTime()));
+            pstm.setInt(2, userID);
             ResultSet rs = pstm.executeQuery();
             while (rs.next()) {
-                TestDateTime tdt = new TestDateTime();
-                tdt.setRoundId(rs.getInt("recId"));
-                if (t == null) {
-                    t = new ArrayList<>();
-                }
-                t.add(tdt);
+                tdt = new TestDateTime();
+                tdt.setRoundId(rs.getInt("recId"));           
             }
         } catch (SQLException e) {
             System.out.println(e);
         }
 
-        return t;
+        return tdt;
     }
 
-    public String chageDate(Date d) { //chage Date+543
+    public static String chageDate(Date d) { //chage Date+543
         String ca = null;
         try {
             SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy");
@@ -186,20 +179,31 @@ public class TestDateTime {
         return ca;
     }
    
-    public TestDateTime showDate(int userId) { //show Date when save
+      public static void main(String[] args) throws ParseException {
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        String s = "2017-04-02";
+        Date d = sf.parse(s);
+       /* TestDateTime t = collectRoundId(d, 1);
+        System.out.println(t.getRoundId());*/
+        TestDateTime td = showDate(1,60);
+        System.out.println(td.getDate());
+     
+    }
+    public static TestDateTime showDate(int userId , int roundId) { //show Date when save
         TestDateTime tdt = null;
 
         try {
             Connection con = ConnectionBuilder.getConnection();
-            String sql = "select recDate from record JOIN patient ON record.patient_patId_fk = patient.patId "
-                    + "where recRound = 1 and patId = ? ";
+            String sql = " select recDate from record JOIN patient ON record.patient_patId_fk = patient.patId "
+                    + " where patId = ? and recId = ? ";
             PreparedStatement pstm = con.prepareStatement(sql);
             pstm.setInt(1, userId);
+            pstm.setInt(2, roundId);
             ResultSet rs = pstm.executeQuery();
             if (rs.next()) {
                 tdt = new TestDateTime();
                 tdt.setDate(rs.getDate("recDate"));
-
+                
             }
         } catch (SQLException e) {
             System.out.println(e);

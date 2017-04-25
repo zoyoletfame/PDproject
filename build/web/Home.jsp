@@ -15,7 +15,9 @@
         <p><a href ="Login.jsp">Login</a></p><br>
         <p><a href ="Register.jsp">Register</a></p>
         <p><a href ="CreateRecord.jsp">สร้าง</a></p>
-        <p><a href ="recoardTable.jsp">ดูประวัติ</a></p>
+        <form action="/SeniorProject/recordTableServlet">
+        <p><a href ="/SeniorProject/recordTableServlet">ดูประวัติ</a></p>
+        </form>
           <%
                 Object d = request.getSession().getAttribute("userId");
                 out.print(d);

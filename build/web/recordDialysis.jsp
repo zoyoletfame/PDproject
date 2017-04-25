@@ -83,51 +83,54 @@
                 <a href="">Home</a>
             </div>
         </form>    
-        
-        <%
-            Object o = request.getAttribute("round");
-            int round = Integer.parseInt(o.toString());
-        %>
-        <%             for (int i = 1; i <= round; i++) {
+        <br>
 
-
-        %>  
-  
+        <br>
         <form action="/SeniorProject/DialysisServlet" method="get">
+            <%
+                if (request.getAttribute("volIn") != null) {
+            %>
+            <input type="textfield" name="date" value="${dates}" readonly>  
 
-            รอบที่<%=i%> <h5 style="margin-left: 90%;"><input type="checkbox" name="auto1" value="auto1">ตั้งเวลาอัตโนมัติ</h5>
+            <%
+            } else {
+            %>
+            <input type="textfield" name="date" value="${date}" readonly>  
+            <%}%>
+            <br>
+            รอบที่ <h5 style="margin-left: 90%;"><input type="checkbox" name="auto1" value="auto1">ตั้งเวลาอัตโนมัติ</h5>
 
             <table width="100%" border="1">
                 <tr>
-                   
+
                     <%
                         if (request.getAttribute("volIn") != null) {
                     %>
                     <td>น้ำยาเข้า</td>
-                    <td>เวลาเริ่ม <%=request.getAttribute("timeIn_start")%>นาที</td>
-                    <td>เวลาออก <%=request.getAttribute("timeIn_end")%>นาที</td>
-                    <td>ปริมาตร <%=request.getAttribute("volIn")%></td>
-                    <%
-                    }else{
-                    %>
+                    <td>เวลาเริ่ม <input type="time" name="timeStartInput" value="${timeIn_start}">นาที</td>
+                    <td>เวลาออก <input type="time" name="timeEndInput" value="${timeIn_end}">นาที</td>
+                    <td>ปริมาตร <input type="text" name="capacityInput" value="${volIn}"> </td>
+                        <%
+                        } else {
+                        %>
                     <td>น้ำยาเข้า</td>
-                    <td>เวลาเริ่ม <input type="time" name="timeStartInput1">นาที</td>
-                    <td>เวลาออก <input type="time" name="timeEndInput1">นาที</td>
-                    <td>ปริมาตร <input type="text" name="capacityInput1"></td>
-                    <%}%>
+                    <td>เวลาเริ่ม <input type="time" name="timeStartInput">นาที</td>
+                    <td>เวลาออก <input type="time" name="timeEndInput">นาที</td>
+                    <td>ปริมาตร <input type="text" name="capacityInput"></td>
+                        <%}%>
                 </tr>   
                 <tr>
                     <td>น้ำยาออก</td>
-                    <td>เวลาเริ่ม <input type="time" name="timeStartOut1">นาที</td>
-                    <td>เวลาออก <input type="time" name="timeEndOut1">นาที</td>
-                    <td>ปริมาตร <input type="text" name="capacityOut1"></td>
+                    <td>เวลาเริ่ม <input type="time" name="timeStartOut">นาที</td>
+                    <td>เวลาออก <input type="time" name="timeEndOut">นาที</td>
+                    <td>ปริมาตร <input type="text" name="capacityOutput"></td>
                 </tr>
                 <tr>
                     <td>ปัสสาวะ</td>
-                    <td><input type="text" name="urinate1"></td>
+                    <td><input type="text" name="urinate"></td>
                 </tr>
             </table>
-            <%}%>
+
             <input type="submit" name="submit" value="บันทึก">
         </form>
     </body>
