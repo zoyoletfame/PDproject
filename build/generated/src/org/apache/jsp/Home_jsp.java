@@ -51,18 +51,39 @@ public final class Home_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("        <title>JSP Page</title>\n");
       out.write("    </head>\n");
       out.write("    <body>\n");
-      out.write("        <p><a href =\"Login.jsp\">Login</a></p><br>\n");
+      out.write("         <p><a href=\"Home.jsp\">HOME</a>\n");
+      out.write("        <p><a href =\"Login.jsp\">Login</a></p>\n");
       out.write("        <p><a href =\"Register.jsp\">Register</a></p>\n");
       out.write("        <p><a href =\"CreateRecord.jsp\">สร้าง</a></p>\n");
       out.write("        <form action=\"/SeniorProject/recordTableServlet\">\n");
       out.write("        <p><a href =\"/SeniorProject/recordTableServlet\">ดูประวัติ</a></p>\n");
       out.write("        </form>\n");
-      out.write("          ");
+      out.write("          <form action = \"/SeniorProject/ShowDialysisEndServlet\">\n");
+      out.write("            <input type=\"hidden\" name=\"roundId\" value=\"");
+      out.write((java.lang.String) org.apache.jasper.runtime.PageContextImpl.evaluateExpression("${roundId}", java.lang.String.class, (PageContext)_jspx_page_context, null));
+      out.write("\">\n");
+      out.write("            ");
 
-                Object d = request.getSession().getAttribute("userId");
-                out.print(d);
+              if(request.getAttribute("showDate") == null){  
+                  out.print(" ");            
             
       out.write("\n");
+      out.write("      \n");
+      out.write("            ");
+}else{
+      out.write("\n");
+      out.write("            <p>");
+      out.write((java.lang.String) org.apache.jasper.runtime.PageContextImpl.evaluateExpression("${showDate}", java.lang.String.class, (PageContext)_jspx_page_context, null));
+      out.write("<p> <input type=\"submit\" value=\"น้ำเข้า\">\n");
+      out.write("            ");
+}
+      out.write("\n");
+      out.write("          </form> \n");
+      out.write("          <form action=\"SeniorProject/deleteServlet\">\n");
+      out.write("              <input type=\"submit\" value=\"ลบ\"\n");
+      out.write("          </form> \n");
+      out.write("            \n");
+      out.write("        <br>\n");
       out.write("    </body>\n");
       out.write("</html>\n");
     } catch (Throwable t) {

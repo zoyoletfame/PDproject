@@ -32,6 +32,14 @@
         <servlet-name>recordTableServlet</servlet-name>
         <servlet-class>Controller.recordTableServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>resolveRecaordServlet</servlet-name>
+        <servlet-class>Controller.resolveRecaordServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>deleteServlet</servlet-name>
+        <servlet-class>Controller.deleteServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>DialysisServlet</servlet-name>
         <url-pattern>/DialysisServlet</url-pattern>
@@ -63,6 +71,14 @@
     <servlet-mapping>
         <servlet-name>recordTableServlet</servlet-name>
         <url-pattern>/recordTableServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>resolveRecaordServlet</servlet-name>
+        <url-pattern>/resolveRecaordServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>deleteServlet</servlet-name>
+        <url-pattern>/deleteServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

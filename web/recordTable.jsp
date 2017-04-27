@@ -23,9 +23,7 @@
         <th colspan="3">น้ำยาออก</th>
         <th rowspan="2">กำไรขาดทุน</th>
         <th rowspan="2">สุทธิ</th>
-        <th rowspan="2">ปัสสาวะ</th>
-        <th rowspan="2">น้ำหนัก</th>
-        <th rowspan="2">ความดันโลหิต</th>
+        <th rowspan="2">ปัสสาวะ</th>    
         <th rowspan="2">หมายเหตุ</th>
     </tr>
     <tr>
@@ -51,9 +49,7 @@
             <td>${record.volDiaOut}</td>
             <td>${record.profit}</td>
             <td>${record.totalProfit}</td>
-            <td>${record.urinate}</td>
-            <td>${record.weight}</td>
-            <td>${record.bloodPressure}</td>
+            <td>${record.urinate}</td>       
             <td>${record.desDiaLiquid}</td>
     </tr>
       </c:forEach>

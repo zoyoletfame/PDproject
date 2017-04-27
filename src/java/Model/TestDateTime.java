@@ -80,20 +80,24 @@ public class TestDateTime {
         return "TestDateTime{" + "roundId=" + roundId + ", round=" + round + "Date " + date + '}';
     }
     
-    public TestDateTime getRoundValue(int userId , Date dateRound) {
-        TestDateTime tdt = null;
+    public static List<TestDateTime> getRoundValue(int userId , Date dateRound) {//เอา id จากวันที่
+        List<TestDateTime> tdt = null;
         try {
             Connection con = ConnectionBuilder.getConnection();
-            String sql = "SELECT MAX(recRound) "
+            String sql = "SELECT * "
                     + "FROM record join patient on record.patient_patId_fk = patient.patId "
                     + "WHERE patId = ? and recDate = ?";
             PreparedStatement pstm = con.prepareStatement(sql);
             pstm.setInt(1, userId);
             pstm.setDate(2, new java.sql.Date(dateRound.getTime()));
             ResultSet rs = pstm.executeQuery();
-            if(rs.next()) {
-                tdt = new TestDateTime();
-                tdt.setRound(rs.getInt("MAX(recRound)"));
+            while(rs.next()) {
+                TestDateTime td = new TestDateTime();
+                td.setRoundId(rs.getInt("recId"));
+                if(tdt==null){
+                    tdt = new ArrayList<>();
+                }
+                tdt.add(td);
             }
         } catch (SQLException e) {
             System.out.println(e);
@@ -202,8 +206,7 @@ public class TestDateTime {
             ResultSet rs = pstm.executeQuery();
             if (rs.next()) {
                 tdt = new TestDateTime();
-                tdt.setDate(rs.getDate("recDate"));
-                
+                tdt.setDate(rs.getDate("recDate"));              
             }
         } catch (SQLException e) {
             System.out.println(e);

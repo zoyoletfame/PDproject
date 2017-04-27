@@ -72,9 +72,7 @@ public final class recordTable_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("        <th colspan=\"3\">น้ำยาออก</th>\n");
       out.write("        <th rowspan=\"2\">กำไรขาดทุน</th>\n");
       out.write("        <th rowspan=\"2\">สุทธิ</th>\n");
-      out.write("        <th rowspan=\"2\">ปัสสาวะ</th>\n");
-      out.write("        <th rowspan=\"2\">น้ำหนัก</th>\n");
-      out.write("        <th rowspan=\"2\">ความดันโลหิต</th>\n");
+      out.write("        <th rowspan=\"2\">ปัสสาวะ</th>    \n");
       out.write("        <th rowspan=\"2\">หมายเหตุ</th>\n");
       out.write("    </tr>\n");
       out.write("    <tr>\n");
@@ -86,65 +84,10 @@ public final class recordTable_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("        <td>ปริมาตร</td>\n");
       out.write("\n");
       out.write("    </tr>\n");
-      out.write("    <tr>\n");
-      out.write("        ");
-      //  c:forEach
-      org.apache.taglibs.standard.tag.rt.core.ForEachTag _jspx_th_c_forEach_0 = (org.apache.taglibs.standard.tag.rt.core.ForEachTag) _jspx_tagPool_c_forEach_var_items.get(org.apache.taglibs.standard.tag.rt.core.ForEachTag.class);
-      _jspx_th_c_forEach_0.setPageContext(_jspx_page_context);
-      _jspx_th_c_forEach_0.setParent(null);
-      _jspx_th_c_forEach_0.setItems((java.lang.Object) org.apache.jasper.runtime.PageContextImpl.evaluateExpression("${dia}", java.lang.Object.class, (PageContext)_jspx_page_context, null));
-      _jspx_th_c_forEach_0.setVar("record");
-      int[] _jspx_push_body_count_c_forEach_0 = new int[] { 0 };
-      try {
-        int _jspx_eval_c_forEach_0 = _jspx_th_c_forEach_0.doStartTag();
-        if (_jspx_eval_c_forEach_0 != javax.servlet.jsp.tagext.Tag.SKIP_BODY) {
-          do {
-            out.write("\n");
-            out.write("            <td>");
-            out.write((java.lang.String) org.apache.jasper.runtime.PageContextImpl.evaluateExpression("${record.date}", java.lang.String.class, (PageContext)_jspx_page_context, null));
-            out.write("</td>\n");
-            out.write("            <td>");
-            out.write((java.lang.String) org.apache.jasper.runtime.PageContextImpl.evaluateExpression("${record.round}", java.lang.String.class, (PageContext)_jspx_page_context, null));
-            out.write("</td>\n");
-            out.write("            ");
- out.println(" ");
-            out.write("\n");
-            out.write("        ");
-            int evalDoAfterBody = _jspx_th_c_forEach_0.doAfterBody();
-            if (evalDoAfterBody != javax.servlet.jsp.tagext.BodyTag.EVAL_BODY_AGAIN)
-              break;
-          } while (true);
-        }
-        if (_jspx_th_c_forEach_0.doEndTag() == javax.servlet.jsp.tagext.Tag.SKIP_PAGE) {
-          return;
-        }
-      } catch (Throwable _jspx_exception) {
-        while (_jspx_push_body_count_c_forEach_0[0]-- > 0)
-          out = _jspx_page_context.popBody();
-        _jspx_th_c_forEach_0.doCatch(_jspx_exception);
-      } finally {
-        _jspx_th_c_forEach_0.doFinally();
-        _jspx_tagPool_c_forEach_var_items.reuse(_jspx_th_c_forEach_0);
-      }
+      out.write("      ");
+      if (_jspx_meth_c_forEach_0(_jspx_page_context))
+        return;
       out.write("\n");
-      out.write("        <td> 1 </td>\n");
-      out.write("        <td> 1 </td>\n");
-      out.write("        <td> 1 </td>\n");
-      out.write("        <td> 1 </td>\n");
-      out.write("        <td> 1 </td>\n");
-      out.write("        <td> 1 </td>\n");
-      out.write("        <td> 1 </td>\n");
-      out.write("        <td> 1 </td>\n");
-      out.write("        <td> 1 </td>\n");
-      out.write("        <td> 1 </td>\n");
-      out.write("        <td> 1 </td>\n");
-      out.write("        <td> 1 </td>\n");
-      out.write("        <td> 1 </td>\n");
-      out.write("        <td> 1 </td>\n");
-      out.write("\n");
-      out.write("\n");
-      out.write("\n");
-      out.write("    </tr>\n");
       out.write("</table>\n");
       out.write("</body>\n");
       out.write("</html>\n");
@@ -159,5 +102,81 @@ public final class recordTable_jsp extends org.apache.jasper.runtime.HttpJspBase
     } finally {
       _jspxFactory.releasePageContext(_jspx_page_context);
     }
+  }
+
+  private boolean _jspx_meth_c_forEach_0(PageContext _jspx_page_context)
+          throws Throwable {
+    PageContext pageContext = _jspx_page_context;
+    JspWriter out = _jspx_page_context.getOut();
+    //  c:forEach
+    org.apache.taglibs.standard.tag.rt.core.ForEachTag _jspx_th_c_forEach_0 = (org.apache.taglibs.standard.tag.rt.core.ForEachTag) _jspx_tagPool_c_forEach_var_items.get(org.apache.taglibs.standard.tag.rt.core.ForEachTag.class);
+    _jspx_th_c_forEach_0.setPageContext(_jspx_page_context);
+    _jspx_th_c_forEach_0.setParent(null);
+    _jspx_th_c_forEach_0.setItems((java.lang.Object) org.apache.jasper.runtime.PageContextImpl.evaluateExpression("${dia}", java.lang.Object.class, (PageContext)_jspx_page_context, null));
+    _jspx_th_c_forEach_0.setVar("record");
+    int[] _jspx_push_body_count_c_forEach_0 = new int[] { 0 };
+    try {
+      int _jspx_eval_c_forEach_0 = _jspx_th_c_forEach_0.doStartTag();
+      if (_jspx_eval_c_forEach_0 != javax.servlet.jsp.tagext.Tag.SKIP_BODY) {
+        do {
+          out.write("\n");
+          out.write("    <tr>\n");
+          out.write("       \n");
+          out.write("            <td>");
+          out.write((java.lang.String) org.apache.jasper.runtime.PageContextImpl.evaluateExpression("${record.date}", java.lang.String.class, (PageContext)_jspx_page_context, null));
+          out.write("</td>\n");
+          out.write("            <td>");
+          out.write((java.lang.String) org.apache.jasper.runtime.PageContextImpl.evaluateExpression("${record.round}", java.lang.String.class, (PageContext)_jspx_page_context, null));
+          out.write("</td>\n");
+          out.write("            <td>1</td>\n");
+          out.write("            <td>");
+          out.write((java.lang.String) org.apache.jasper.runtime.PageContextImpl.evaluateExpression("${record.timeDiaIn_start}", java.lang.String.class, (PageContext)_jspx_page_context, null));
+          out.write("</td>\n");
+          out.write("            <td>");
+          out.write((java.lang.String) org.apache.jasper.runtime.PageContextImpl.evaluateExpression("${record.timeDiaIn_end}", java.lang.String.class, (PageContext)_jspx_page_context, null));
+          out.write("</td>\n");
+          out.write("            <td>");
+          out.write((java.lang.String) org.apache.jasper.runtime.PageContextImpl.evaluateExpression("${record.volDiaIn}", java.lang.String.class, (PageContext)_jspx_page_context, null));
+          out.write("</td>\n");
+          out.write("            <td>");
+          out.write((java.lang.String) org.apache.jasper.runtime.PageContextImpl.evaluateExpression("${record.timeDiaOut_start}", java.lang.String.class, (PageContext)_jspx_page_context, null));
+          out.write("</td>\n");
+          out.write("            <td>");
+          out.write((java.lang.String) org.apache.jasper.runtime.PageContextImpl.evaluateExpression("${record.timeDiaOut_end}", java.lang.String.class, (PageContext)_jspx_page_context, null));
+          out.write("</td>\n");
+          out.write("            <td>");
+          out.write((java.lang.String) org.apache.jasper.runtime.PageContextImpl.evaluateExpression("${record.volDiaOut}", java.lang.String.class, (PageContext)_jspx_page_context, null));
+          out.write("</td>\n");
+          out.write("            <td>");
+          out.write((java.lang.String) org.apache.jasper.runtime.PageContextImpl.evaluateExpression("${record.profit}", java.lang.String.class, (PageContext)_jspx_page_context, null));
+          out.write("</td>\n");
+          out.write("            <td>");
+          out.write((java.lang.String) org.apache.jasper.runtime.PageContextImpl.evaluateExpression("${record.totalProfit}", java.lang.String.class, (PageContext)_jspx_page_context, null));
+          out.write("</td>\n");
+          out.write("            <td>");
+          out.write((java.lang.String) org.apache.jasper.runtime.PageContextImpl.evaluateExpression("${record.urinate}", java.lang.String.class, (PageContext)_jspx_page_context, null));
+          out.write("</td>       \n");
+          out.write("            <td>");
+          out.write((java.lang.String) org.apache.jasper.runtime.PageContextImpl.evaluateExpression("${record.desDiaLiquid}", java.lang.String.class, (PageContext)_jspx_page_context, null));
+          out.write("</td>\n");
+          out.write("    </tr>\n");
+          out.write("      ");
+          int evalDoAfterBody = _jspx_th_c_forEach_0.doAfterBody();
+          if (evalDoAfterBody != javax.servlet.jsp.tagext.BodyTag.EVAL_BODY_AGAIN)
+            break;
+        } while (true);
+      }
+      if (_jspx_th_c_forEach_0.doEndTag() == javax.servlet.jsp.tagext.Tag.SKIP_PAGE) {
+        return true;
+      }
+    } catch (Throwable _jspx_exception) {
+      while (_jspx_push_body_count_c_forEach_0[0]-- > 0)
+        out = _jspx_page_context.popBody();
+      _jspx_th_c_forEach_0.doCatch(_jspx_exception);
+    } finally {
+      _jspx_th_c_forEach_0.doFinally();
+      _jspx_tagPool_c_forEach_var_items.reuse(_jspx_th_c_forEach_0);
+    }
+    return false;
   }
 }

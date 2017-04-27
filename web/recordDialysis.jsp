@@ -109,16 +109,16 @@
                     <td>น้ำยาเข้า</td>
                     <td>เวลาเริ่ม <input type="time" name="timeStartInput" value="${timeIn_start}">นาที</td>
                     <td>เวลาออก <input type="time" name="timeEndInput" value="${timeIn_end}">นาที</td>
-                    <td>ปริมาตร <input type="text" name="capacityInput" value="${volIn}"> </td>
-                        <%
-                        } else {
-                        %>
-                    <td>น้ำยาเข้า</td>
-                    <td>เวลาเริ่ม <input type="time" name="timeStartInput">นาที</td>
-                    <td>เวลาออก <input type="time" name="timeEndInput">นาที</td>
-                    <td>ปริมาตร <input type="text" name="capacityInput"></td>
-                        <%}%>
-                </tr>   
+                    <td>ปริมาตร <input type="text" name="capacityInput" value="${volIn}"> </td>                  
+                    <td>ความเข้มข้น <select name="intensity" >
+                            <option value="0.5" ${intensity==0.5?selected:""}>0.5</option>
+                            <option value="1" ${intensity==1?selected:""} >1</option>
+                            <option value="1.5" ${intensity==1.5?selected:""}>1.5</option>
+                            <option value="2" ${intensity==2?selected:""}>2</option>
+                            <option value="2.5" ${intensity==2.5?selected:""}>2.5</option>
+                            <option value="3">3 ${intensity==3?selected:""}</option>
+                        </select>
+                    </td>
                 <tr>
                     <td>น้ำยาออก</td>
                     <td>เวลาเริ่ม <input type="time" name="timeStartOut">นาที</td>
@@ -128,7 +128,88 @@
                 <tr>
                     <td>ปัสสาวะ</td>
                     <td><input type="text" name="urinate"></td>
+                    <td> ลักษณะน้ำยา  <select name="desDia">
+                            <option value="เหลืองใส">เหลืองใส</option>
+                            <option value="ขาวใส">ขาวใส</option>
+
+                        </select>
+                    </td>
+
                 </tr>
+                </tr>
+                <tr>
+                <tr>
+
+                    <%
+                    } else if (request.getAttribute("volIn") != null && request.getAttribute("volOut") != null) {
+                    %>
+                    <td>น้ำยาเข้า</td>
+                    <td>เวลาเริ่ม <input type="time" name="timeStartInput" value="${timeIn_start}">นาที</td>
+                    <td>เวลาออก <input type="time" name="timeEndInput" value="${timeIn_end}">นาที</td>
+                    <td>ปริมาตร <input type="text" name="capacityInput" value="${volIn}"> </td>
+                    <td>ความเข้มข้น <select name="intensity" >
+                            <option value="0.5" ${intensity==0.5?selected:""}>0.5</option>
+                            <option value="1" ${intensity==1?selected:""} >1</option>
+                            <option value="1.5" ${intensity==1.5?selected:""}>1.5</option>
+                            <option value="2" ${intensity==2?selected:""}>2</option>
+                            <option value="2.5" ${intensity==2.5?selected:""}>2.5</option>
+                            <option value="3">3 ${intensity==3?selected:""}</option>
+                        </select>
+                    </td>          
+                </tr>
+                <tr>
+                    <td>น้ำยาออก</td>
+                    <td>เวลาเริ่ม <input type="time" name="timeStartOut">นาที</td>
+                    <td>เวลาออก <input type="time" name="timeEndOut">นาที</td>
+                    <td>ปริมาตร <input type="text" name="capacityOutput"></td>
+                </tr>
+                <tr>
+                    <td>ปัสสาวะ</td>
+                    <td><input type="text" name="urinate"></td>
+                    <td> ลักษณะน้ำยา  <select name="desDia">
+                            <option value="เหลืองใส">เหลืองใส</option>
+                            <option value="ขาวใส">ขาวใส</option>
+
+                        </select>
+                    </td>
+
+                </tr>
+                <tr>
+                    <%
+                    } else {
+                    %>
+                    <td>น้ำยาเข้า</td>
+                    <td>เวลาเริ่ม <input type="time" name="timeStartInput" >นาที</td>
+                    <td>เวลาออก <input type="time" name="timeEndInput">นาที</td>
+                    <td>ปริมาตร <input type="text" name="capacityInput"></td>
+                    <td>ความเข้มข้น <select name="intensity">
+                            <option value="0.5">0.5</option>
+                            <option value="1">1</option>
+                            <option value="1.5">1.5</option>
+                            <option value="2">2</option>
+                            <option value="2.5">2.5</option>
+                            <option value="3">3</option>
+                        </select> </td>
+                <tr>
+                    <td>น้ำยาออก</td>
+                    <td>เวลาเริ่ม <input type="time" name="timeStartOut" readonly>นาที</td>
+                    <td>เวลาออก <input type="time" name="timeEndOut" readonly>นาที</td>
+                    <td>ปริมาตร <input type="text" name="capacityOutput" readonly></td>
+                </tr>
+                <tr>
+                    <td>ปัสสาวะ</td>
+                    <td><input type="text" name="urinate" readonly></td>
+                    <td> ลักษณะน้ำยา  <select name="desDia" readonly>
+                            <option value="เหลืองใส">เหลืองใส</option>
+                            <option value="ขาวใส">ขาวใส</option>
+
+                        </select>
+                    </td>
+
+                </tr>
+                <%}%>
+                </tr>   
+
             </table>
 
             <input type="submit" name="submit" value="บันทึก">

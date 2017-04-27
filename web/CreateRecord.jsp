@@ -25,9 +25,6 @@
             ครั้ง
             <input id="saveRound" type="submit" value="บันทึก">
 </form>
-      <%
-                Object d = request.getSession().getAttribute("userId");
-                out.print(d);
-            %>
+    
 </body>
 </html>

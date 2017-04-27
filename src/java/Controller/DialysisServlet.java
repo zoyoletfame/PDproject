@@ -35,6 +35,7 @@ public class DialysisServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
         String startIn = request.getParameter("timeStartInput");
         String endIn = request.getParameter("timeEndInput");
         Object userId = request.getSession().getAttribute("userId");
@@ -42,36 +43,39 @@ public class DialysisServlet extends HttpServlet {
         String endOut = request.getParameter("timeEndOut");
         String urinate = request.getParameter("urinate");
         String date = request.getParameter("date");
-
+        String desDia = request.getParameter("desDia");
+        
         try {
             //parse string to date 
             SimpleDateFormat sf = new SimpleDateFormat("HH:mm");
             SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");
             Date recDate = s.parse(date);
             int userIds = Integer.parseInt(userId.toString());
+            int capIn = Integer.parseInt(request.getParameter("capacityInput"));
+            double intensity = Double.parseDouble(request.getParameter("intensity"));
             // select roundID
             TestDateTime tdt = TestDateTime.collectRoundId(recDate, userIds);
-            //insert data
+            //insert data in
             if (startOut.isEmpty()) {
                 Date dateInSta = sf.parse(startIn);
-                Date dateInEnd = sf.parse(endIn);
-                int capIn = Integer.parseInt(request.getParameter("capacityInput"));
+                Date dateInEnd = sf.parse(endIn);            
                 Dialysis dia = new Dialysis();
-                dia.getRecordIn(capIn, dateInSta, dateInEnd, tdt.getRoundId());             
+                dia.getRecordIn(capIn, dateInSta, dateInEnd,intensity, tdt.getRoundId());             
                 System.out.println("fdsf");
-            } else {
+            } else {  // insert data out
                 System.out.println("fdsfffffffffff");
                 Date dateOutSta = sf.parse(startOut);
                 Date dateOutEnd = sf.parse(endOut);
                 int capOut = Integer.parseInt(request.getParameter("capacityOutput"));
                 int urinateInt = Integer.parseInt(urinate);
-                Dialysis.getRecordOut(capOut, dateOutSta, dateOutEnd, urinateInt, userIds, recDate);
-                
+                Dialysis.getRecordOut(capOut, dateOutSta, dateOutEnd, urinateInt, userIds, recDate,desDia); //อัพเดทข้อมูล
+                Dialysis dia = Dialysis.eachProfit(capIn, capOut, userIds, recDate);   // คำนวณกำไร
+                Dialysis.totalsProfit(recDate, userIds, dia.getProfit(), urinateInt);  // สุทธิ
             }
             //show date 
             request.setAttribute("roundId", tdt.getRoundId());
             request.setAttribute("showDate", TestDateTime.chageDate(recDate));        
-            getServletContext().getRequestDispatcher("/ShowDate.jsp").forward(request, response);
+            getServletContext().getRequestDispatcher("/Home.jsp").forward(request, response);
 
         } catch (IOException e) {
             System.out.println(e);

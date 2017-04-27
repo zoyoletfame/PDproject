@@ -5,14 +5,8 @@
  */
 package Controller;
 
-import Model.Dialysis;
-import Model.TestDateTime;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Fame
  */
-public class ShowDialysisEndServlet extends HttpServlet {
+public class deleteServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,28 +30,6 @@ public class ShowDialysisEndServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        Object userId = request.getSession().getAttribute("userId");
-        String roundId = request.getParameter("roundId");
-        
-        try{       
-            int rId = Integer.parseInt(roundId);
-            int userID = Integer.parseInt(userId.toString());   
-            
-            TestDateTime td = TestDateTime.showDate(userID,rId);
-            Dialysis dia = Dialysis.showRecord(userID,td.getDate());  
-            request.setAttribute("rId", roundId);
-            request.setAttribute("dates", td.getDate()); 
-            
-            request.setAttribute("volIn", dia.getVolDiaIn());
-            request.setAttribute("timeIn_start", dia.getTimeDiaIn_start());
-            request.setAttribute("timeIn_end", dia.getTimeDiaIn_end());
-            request.setAttribute("intensity", dia.getIntensity());
-            // set round ไปหน้า record Dialysis         
-          
-            getServletContext().getRequestDispatcher("/recordDialysis.jsp").forward(request, response);
-        }catch(NumberFormatException e){
-            System.out.println(e);
-        }
        
     }
 
