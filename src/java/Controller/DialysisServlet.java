@@ -42,41 +42,65 @@ public class DialysisServlet extends HttpServlet {
         String startOut = request.getParameter("timeStartOut");
         String endOut = request.getParameter("timeEndOut");
         String urinate = request.getParameter("urinate");
-        String date = request.getParameter("date");
+        String dateValue = request.getParameter("dateValue"); // วันที่เอาไปคำนวณ
         String desDia = request.getParameter("desDia");
-        
+        String round = request.getParameter("round");
+        String dateChange = request.getParameter("date"); // วันที่ฟอแมทไทย
+       
+        String topic = request.getParameter("topic"); // เอาหัวข้อมา
+       
         try {
             //parse string to date 
             SimpleDateFormat sf = new SimpleDateFormat("HH:mm");
             SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");
-            Date recDate = s.parse(date);
+            SimpleDateFormat sff = new SimpleDateFormat("dd-MM-yyyy");
+            Date recDateDD = sff.parse(dateValue);
+            Date recDateYY = s.parse(dateValue);
+            int rounds = Integer.parseInt(round);
             int userIds = Integer.parseInt(userId.toString());
             int capIn = Integer.parseInt(request.getParameter("capacityInput"));
-            double intensity = Double.parseDouble(request.getParameter("intensity"));
-            // select roundID
-            TestDateTime tdt = TestDateTime.collectRoundId(recDate, userIds);
+            double intensity = Double.parseDouble(request.getParameter("intensity"));   
+           
             //insert data in
-            if (startOut.isEmpty()) {
+            System.out.println("sdf");
+            if(topic.equals("แก้ไข")){
+                System.out.println("fsdfdfdfdfamefamefamefame");
                 Date dateInSta = sf.parse(startIn);
-                Date dateInEnd = sf.parse(endIn);            
-                Dialysis dia = new Dialysis();
-                dia.getRecordIn(capIn, dateInSta, dateInEnd,intensity, tdt.getRoundId());             
-                System.out.println("fdsf");
+                Date dateInEnd = sf.parse(endIn);
+                Date dateOutSta = sf.parse(startOut);
+                Date dateOutEnd = sf.parse(endOut);            
+                int capOut = Integer.parseInt(request.getParameter("capacityOutput"));
+                int urinateInt = Integer.parseInt(urinate);
+                Dialysis.updateRecordTotal(capIn, dateInSta,dateInEnd, intensity, capOut, dateOutSta, dateOutEnd, 
+                        urinateInt, userIds, recDateDD, desDia, rounds);
+                
+             } else if (topic.equals("น้ำเข้า")) {
+                System.out.println("fsdfdfdfdfame");
+                TestDateTime tdt = TestDateTime.collectRoundId(recDateYY, userIds,rounds);
+                Date dateInSta = sf.parse(startIn);
+                Date dateInEnd = sf.parse(endIn);                          
+                Dialysis.getRecordIn(capIn, dateInSta, dateInEnd,intensity, tdt.getRoundId());             
+                
             } else {  // insert data out
-                System.out.println("fdsfffffffffff");
+                System.out.println("sdfsdfsdfsdfsd");
                 Date dateOutSta = sf.parse(startOut);
                 Date dateOutEnd = sf.parse(endOut);
                 int capOut = Integer.parseInt(request.getParameter("capacityOutput"));
                 int urinateInt = Integer.parseInt(urinate);
-                Dialysis.getRecordOut(capOut, dateOutSta, dateOutEnd, urinateInt, userIds, recDate,desDia); //อัพเดทข้อมูล
-                Dialysis dia = Dialysis.eachProfit(capIn, capOut, userIds, recDate);   // คำนวณกำไร
-                Dialysis.totalsProfit(recDate, userIds, dia.getProfit(), urinateInt);  // สุทธิ
+                Dialysis.getRecordOut(capOut, dateOutSta, dateOutEnd, urinateInt, userIds, recDateDD,desDia,rounds); //อัพเดทข้อมูล
+                Dialysis dia = Dialysis.eachProfit(capIn, capOut, userIds, recDateDD, rounds);   // คำนวณกำไร
+                Dialysis.totalsProfit(recDateDD, userIds, dia.getProfit(), urinateInt);  // สุทธิ           
             }
-            //show date 
-            request.setAttribute("roundId", tdt.getRoundId());
-            request.setAttribute("showDate", TestDateTime.chageDate(recDate));        
+            //show date   
+            
+            List<TestDateTime> showAllDate = TestDateTime.showDateAll(userIds);        
+            List<TestDateTime> roundMax = TestDateTime.getRoundMaxList(userIds, showAllDate);
+            request.setAttribute("showMaxRound",TestDateTime.getRoundMaxList(userIds,showAllDate));
+            request.setAttribute("showDate", TestDateTime.chageDateList(showAllDate,roundMax)); 
+            
             getServletContext().getRequestDispatcher("/Home.jsp").forward(request, response);
 
+           
         } catch (IOException e) {
             System.out.println(e);
         } catch (ParseException e) {

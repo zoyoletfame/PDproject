@@ -40,7 +40,7 @@
        
             <td>${record.date}</td>
             <td>${record.round}</td>
-            <td>1</td>
+            <td>${rocord.intensity}</td>
             <td>${record.timeDiaIn_start}</td>
             <td>${record.timeDiaIn_end}</td>
             <td>${record.volDiaIn}</td>

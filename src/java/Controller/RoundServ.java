@@ -43,16 +43,12 @@ public class RoundServ extends HttpServlet {
    
         try {        
             Date date2 = sf.parse(date);
-            int r = Integer.parseInt(request.getParameter("roundSelect"));
-            TestDateTime rud = new TestDateTime();
-            int rIds = Integer.parseInt(rId.toString());
-            for (int i = 1; i <= r; i++) {
-                rud.insertRound(i, date2 ,rIds);
-            }   
+            int r = Integer.parseInt(request.getParameter("roundSelect"));           
+            int rIds = Integer.parseInt(rId.toString());     
+            TestDateTime.insertRound(r, date2 ,rIds);             
             request.setAttribute("round", r);
-            request.setAttribute("date", date);
-            
-           
+            request.setAttribute("dateValue", date);
+            request.setAttribute("changedate",TestDateTime.changeDate(date2));         
             getServletContext().getRequestDispatcher("/recordDialysis.jsp").forward(request, response);
            } catch (ParseException e) {
             System.out.println(e);

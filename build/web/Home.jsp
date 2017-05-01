@@ -3,7 +3,7 @@
     Created on : Mar 30, 2017, 11:29:31 PM
     Author     : Fame
 --%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -12,27 +12,42 @@
         <title>JSP Page</title>
     </head>
     <body>
-         <p><a href="Home.jsp">HOME</a>
-        <p><a href ="Login.jsp">Login</a></p>
-        <p><a href ="Register.jsp">Register</a></p>
+        <p><a href="Home.jsp">HOME</a>
+
+
         <p><a href ="CreateRecord.jsp">สร้าง</a></p>
         <form action="/SeniorProject/recordTableServlet">
-        <p><a href ="/SeniorProject/recordTableServlet">ดูประวัติ</a></p>
+            <p><a href ="/SeniorProject/recordTableServlet">ดูประวัติ</a></p>
         </form>
-          <form action = "/SeniorProject/ShowDialysisEndServlet">
-            <input type="hidden" name="roundId" value="${roundId}">
-            <%
-              if(request.getAttribute("showDate") == null){  
-                  out.print(" ");            
-            %>
-      
-            <%}else{%>
-            <p>${showDate}<p> <input type="submit" value="น้ำเข้า">  
-          </form> 
-          <form action="SeniorProject/deleteServlet">
-              <input type="submit" value="ลบ"
-          </form> 
-            <%}%>
-        <br>
+
+        <c:forEach items = "${showDate}" var = "showBack">
+
+            <form action = "/SeniorProject/ShowDialysisEndServlet">    
+                <input type="textfiled" name="date" value=" ${showBack.thaiDate}" readonly>
+                รอบที <input type="textfiled" name="maxRound" value=" ${showBack.round}" readonly>
+                <a href="ShowDialysisEndServlet?dateLoop=${showBack.thaiDate}">น้ำออก</a>
+                <a href="resolveRecordServlet?dateLoop=${showBack.thaiDate}&maxRound=${showBack.round}">แก้ไข</a>  
+                <a href="deleteServlet?date=${showBack.thaiDate}">ลบ</a>
+
+
+                <%--      <c:choose>
+                                  <c:when test = "${showBack==showBack}">
+                                    
+                                      <c:choose>
+                                          <c:when test = "${volOut != null}">
+                                              <a href="resolveRecordServlet?date=${showBack}">แก้ไข</a> 
+                                                <a href="deleteServlet?date=${showBack}">ลบ</a>  
+                                          </c:when>
+                                          <c:otherwise>
+                                              
+                                          </c:otherwise>
+                                      </c:choose>
+                                  </c:when>
+                              </c:choose>
+                --%>
+            </form> 
+
+        </c:forEach>
+
     </body>
 </html>

@@ -6,6 +6,7 @@
 package Controller;
 
 import Model.Patient;
+import Model.TestDateTime;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -36,12 +37,15 @@ public class LoginServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String user = request.getParameter("username");
         String pass = request.getParameter("password");
-        Patient p = new Patient();
-        boolean login = p.login(user, pass);
+        
+        boolean login = Patient.login(user, pass);
         if(login == true){
-            int id = p.collectIdPad(user).getpatId();
+            int id = Patient.collectIdPad(user).getpatId();
             HttpSession session = request.getSession();
             session.setAttribute("userId", id);
+            List<TestDateTime> showAllDate = TestDateTime.showDateAll(id);    
+            List<TestDateTime> roundMax = TestDateTime.getRoundMaxList(id, showAllDate);
+            request.setAttribute("showDate", TestDateTime.chageDateList(showAllDate,roundMax));
             getServletContext().getRequestDispatcher("/Home.jsp").forward(request, response);
         }else{
             request.setAttribute("msg", "Username or Password failed !!");

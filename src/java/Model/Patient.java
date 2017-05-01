@@ -20,6 +20,7 @@ import java.util.List;
  * @author Fame
  */
 public class Patient {
+
     private String patUsername;
     private String patPassword;
     private String patFirstname;
@@ -39,7 +40,7 @@ public class Patient {
     public Patient(String patUsername) {
         this.patUsername = patUsername;
     }
-    
+
     public String getPatUsername() {
         return patUsername;
     }
@@ -140,50 +141,55 @@ public class Patient {
     public String toString() {
         return "Patient{" + "patUsername=" + patUsername + ", patPassword=" + patPassword + ", patFirstname=" + patFirstname + ", patLastname=" + patLastname + ", patSex=" + patSex + ", patBirthDate=" + patBirthDate + ", patAge=" + patAge + ", hospName=" + hospName + ", telCenter=" + telCenter + ", telNurse=" + telNurse + ", detail=" + detail + ", diaInId=" + patId + '}';
     }
-  
-    public static Patient collectIdPad(String user){
+
+    public static Patient collectIdPad(String user) {
         Patient p = null;
-        try{
+        try {
             Connection con = ConnectionBuilder.getConnection();
             String sql = "select patId from patient where patUsername like ?";
             PreparedStatement pstm = con.prepareStatement(sql);
             pstm.setString(1, user);
             ResultSet rs = pstm.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 p = new Patient();
                 p.setPatId(rs.getInt("patId"));
-               
+
             }
-        }catch(SQLException e){
+            con.close();
+        } catch (SQLException e) {
             System.out.println(e);
         }
-            
+
         return p;
     }
-    public boolean login(String user , String pass){
+
+    public static boolean login(String user, String pass) {
         boolean login = false;
-        try{
+        try {
             Connection con = ConnectionBuilder.getConnection();
             String sql = "select * from patient where patUsername like ? and patPassword like ?";
-            PreparedStatement pstm = con.prepareStatement(sql);         
+            PreparedStatement pstm = con.prepareStatement(sql);
             pstm.setString(1, user);
             pstm.setString(2, pass);
             ResultSet rs = pstm.executeQuery();
-            if(rs.next()){           
+            if (rs.next()) {
                 login = true;
             }
-        }catch(SQLException e){
-            System.out.println(e);         
+            con.close();
+        } catch (SQLException e) {
+            System.out.println(e);
         }
         return login;
     }
+
     public static void main(String[] args) {
         boolean f = Register("fame", "fd", "ดกด", "ดก", "ชาย");
         System.out.println(f);
     }
-    public static boolean Register(String user, String pass , String fname ,String lname , String sex){
-       boolean res = true;
-        try{
+
+    public static boolean Register(String user, String pass, String fname, String lname, String sex) {
+        boolean res = true;
+        try {
             Connection con = ConnectionBuilder.getConnection();
             String sql = "insert into patient(patUsername,patPassword,patFirstname,patLastname,patSex) value(?,?,?,?,?)";
             PreparedStatement pstm = con.prepareStatement(sql);
@@ -192,12 +198,13 @@ public class Patient {
             pstm.setString(3, fname);
             pstm.setString(4, lname);
             pstm.setString(5, sex);
-            int rs = pstm.executeUpdate();        
-        }catch(SQLException e){
+            int rs = pstm.executeUpdate();
+            con.close();
+        } catch (SQLException e) {
             res = false;
             System.out.println("username Duplicate ");
         }
         return res;
     }
-  
+
 }

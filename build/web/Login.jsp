@@ -18,6 +18,7 @@
             password :<input type="password" name="password"><br>
             <input type="submit" name="submit" value="เข้าสู่ระบบ">
         </form>
+        <p><a href ="Register.jsp">Register</a></p>
         <br>
         <%
             if(request.getAttribute("msg") == null){

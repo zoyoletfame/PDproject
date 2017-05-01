@@ -63,25 +63,37 @@ public class Dialysis {
         this.urinate = urinate;
     }
 
-    public static Dialysis eachProfit(int volIn, int volOut, int userId, Date d) {
-
+    public static Dialysis eachProfit(int volIn, int volOut, int userId, Date d , int round) {
+        Connection con = null;
         Dialysis dia = new Dialysis();
         int profit = volIn - volOut;
         dia.setProfit(profit);
         try {
-            Connection con = ConnectionBuilder.getConnection();
-            String sql2 = " update dialysis "
+            con = ConnectionBuilder.getConnection();
+            String sql = " update dialysis "
                     + " JOIN record ON dialysis.record_recId_fk = record.recId "
                     + " JOIN patient ON record.patient_patId_fk = patient.patId "
                     + " set Profit =  ? "
-                    + " where patId = ? and recDate = ? ";
-            PreparedStatement ps = con.prepareStatement(sql2);
+                    + " where patId = ? and recDate = ? and recRound = ? ";
+            PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, profit);
             ps.setInt(2, userId);
             ps.setDate(3, new java.sql.Date(d.getTime()));
+            ps.setInt(4, round);
             int rs = ps.executeUpdate();
+            con.close();
+
         } catch (SQLException e) {
             System.out.println(e);
+        }finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+
         }
         return dia;
 
@@ -89,10 +101,11 @@ public class Dialysis {
 
     public static Dialysis totalsProfit(Date d, int userId, int profit, int urinate) {
         Dialysis dia = null;
+        Connection con = null;
         int profitResult = 0;
         int urinateResult = 0;
         try {
-            Connection con = ConnectionBuilder.getConnection();
+            con = ConnectionBuilder.getConnection();
             String sql = "select * from record JOIN patient ON record.patient_patId_fk = patient.patId "
                     + " where patId = ? and recDate = ? ";
             PreparedStatement ps = con.prepareStatement(sql);
@@ -116,16 +129,27 @@ public class Dialysis {
             ps2.setInt(3, userId);
             ps2.setDate(4, new java.sql.Date(d.getTime()));
             int rs2 = ps2.executeUpdate();
+            con.close();
         } catch (SQLException e) {
             System.out.println(e);
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+
         }
         return dia;
     }
 
     public static Dialysis showsRecordDialysis(int userId, Date d) {
         Dialysis dia = null;
+        Connection con = null;
         try {
-            Connection con = ConnectionBuilder.getConnection();
+            con = ConnectionBuilder.getConnection();
             String sql = "select * "
                     + "from dialysis JOIN record ON dialysis.record_recId_fk = record.recId "
                     + "JOIN patient ON record.patient_patId_fk = patient.patId "
@@ -147,16 +171,25 @@ public class Dialysis {
                 dia.setDesDiaLiquid(rs.getString("DesDiaLiquid"));
                 dia.setRound_Id(rs.getInt("record_recId_fk"));
             }
+            con.close();
         } catch (SQLException e) {
             System.out.println(e);
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+
         }
         return dia;
     }
-
-    public static Boolean getRecordIn(int volDiaIn, Date timeDiaIn_start, Date timeDiaIn_end, double intensity, int roundId) { //insert data to DB
-
+     public static Boolean getRecordIn(int volDiaIn, Date timeDiaIn_start, Date timeDiaIn_end, double intensity, int roundId) { //insert data to DB
+        Connection con = null;
         try {
-            Connection con = ConnectionBuilder.getConnection();
+            con = ConnectionBuilder.getConnection();
             String sql = "insert into dialysis(volDiaIn,timeDiaIn_start,timeDiaIn_end ,intensity, record_recId_fk) value(?,?,?,?,?)";
             PreparedStatement pstm = con.prepareStatement(sql);
             pstm.setInt(1, volDiaIn);
@@ -165,22 +198,72 @@ public class Dialysis {
             pstm.setDouble(4, intensity);
             pstm.setInt(5, roundId);
             int rs = pstm.executeUpdate();
-
+            con.close();
         } catch (SQLException e) {
             System.out.println(e);
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+
+        }
+        return true;
+    }
+    
+    public static Boolean updateRecordTotal(int volDiaIn, Date timeDiaIn_start, Date timeDiaIn_end, double intensity,int volDiaOut,
+            Date timeDiaOut_start, Date timeDiaOut_end, int urinate, int userId, Date recDate, String desDia , int round) { //insert all to data to DB
+        Connection con = null;
+        try {
+            con = ConnectionBuilder.getConnection();
+            String sql = "update dialysis "
+                    + " JOIN record ON dialysis.record_recId_fk = record.recId "
+                    + " JOIN patient ON record.patient_patId_fk = patient.patId "
+                    + " set volDiaIn = ? , timeDiaIn_start = ?, timeDiaIn_end = ?,intensity = ? ,volDiaOut = ? , timeDiaOut_start = ? "
+                    + " ,timeDiaOut_end = ? , urinate = ? ,desDiaLiquid = ? "
+                    + " where patId = ? and recDate = ? and recRound = ?";
+            PreparedStatement pstm = con.prepareStatement(sql);
+            pstm.setInt(1, volDiaIn);
+            pstm.setTime(2, new java.sql.Time(timeDiaIn_start.getTime()));
+            pstm.setTime(3, new java.sql.Time(timeDiaIn_end.getTime()));
+            pstm.setDouble(4, intensity);
+            pstm.setInt(5, volDiaOut);
+            pstm.setTime(6, new java.sql.Time(timeDiaOut_start.getTime()));
+            pstm.setTime(7, new java.sql.Time(timeDiaOut_end.getTime()));
+            pstm.setInt(8, urinate);
+            pstm.setString(9, desDia);
+            pstm.setInt(10, userId);
+            pstm.setDate(11, new java.sql.Date(recDate.getTime())); 
+            pstm.setInt(12, round);
+            int rs = pstm.executeUpdate();
+            con.close();
+        } catch (SQLException e) {
+            System.out.println(e);
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+
         }
         return true;
     }
 
-    public static Boolean getRecordOut(int volDiaOut, Date timeDiaOut_start, Date timeDiaOut_end, int urinate, int userId, Date recDate, String desDia) { //insert data to DB
-
+    public static Boolean getRecordOut(int volDiaOut, Date timeDiaOut_start, Date timeDiaOut_end, int urinate, int userId, Date recDate, String desDia , int round) { //insert data to DB
+        Connection con = null;
         try {
-            Connection con = ConnectionBuilder.getConnection();
+            con = ConnectionBuilder.getConnection();
             String sql = "update dialysis "
                     + " JOIN record ON dialysis.record_recId_fk = record.recId "
                     + " JOIN patient ON record.patient_patId_fk = patient.patId "
                     + " set volDiaOut = ? , timeDiaOut_start = ? ,timeDiaOut_end = ? , urinate = ? ,desDiaLiquid = ? "
-                    + " where patId = ? and recDate = ? ";
+                    + " where patId = ? and recDate = ? and recRound = ?";
             PreparedStatement pstm = con.prepareStatement(sql);
             pstm.setInt(1, volDiaOut);
             pstm.setTime(2, new java.sql.Time(timeDiaOut_start.getTime()));
@@ -189,55 +272,137 @@ public class Dialysis {
             pstm.setString(5, desDia);
             pstm.setInt(6, userId);
             pstm.setDate(7, new java.sql.Date(recDate.getTime()));
+            pstm.setInt(8,round);
+            int rs = pstm.executeUpdate();
+            con.close();
+        } catch (SQLException e) {
+            System.out.println(e);
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+
+        }
+        return true;
+    }
+    public static Dialysis deleteDialysis(List<TestDateTime> recId) { // delete table dialysis
+        Dialysis dia = null;
+        Connection con = null;
+        List<TestDateTime> td = recId;
+        for (int i = 0; i < td.size(); i++) {
+
+            try {
+                con = ConnectionBuilder.getConnection();
+                String sql = "delete "
+                        + "from dialysis "
+                        + "WHERE record_recId_fk = ? ";
+                PreparedStatement pstm = con.prepareStatement(sql);
+                pstm.setInt(1, td.get(i).getRoundId());
+                int rs = pstm.executeUpdate();
+
+            } catch (SQLException e) {
+                System.out.println(e);
+            } finally {
+                try {
+                    if (con != null) {
+                        con.close();
+                    }
+                } catch (SQLException e) {
+                    System.out.println(e);
+                }
+
+            }
+        }
+        return dia;
+    }
+
+    public static Dialysis deleteDate(int userId, Date d) { // ลบวันที่
+        Dialysis dia = null;
+        Connection con = null;
+        try {
+            con = ConnectionBuilder.getConnection();
+            String sql = "delete  "
+                    + "from record "
+                    + "WHERE patient_patId_fk = ? and recDate = ? ";
+            PreparedStatement pstm = con.prepareStatement(sql);
+            pstm.setInt(1, userId);
+            pstm.setDate(2, new java.sql.Date(d.getTime()));
             int rs = pstm.executeUpdate();
 
         } catch (SQLException e) {
             System.out.println(e);
-        }
-        return true;
-    }/*
-    public static void main(String[] args) throws ParseException {
-        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
 
-        Date da = new Date();
-        System.out.println(da);
-        Dialysis d = showRecord(1, da);
-        System.out.println(d.getIntensity());
-
-    }*/
-    public static Dialysis deleteDate(int userId , Date d ,int recId) { // ลบวันที่
-        Dialysis dia = null;
-        try {
-            Connection con = ConnectionBuilder.getConnection();
-            String sql = "delete * "
-                    + "from dialysis"       
-                    + "WHERE record_recId_fk = ? ";
-            PreparedStatement pstm = con.prepareStatement(sql);
-            pstm.setInt(1, recId);      
-            int rs = pstm.executeUpdate();
-             String sql2 = "delete * "
-                    + "from record "       
-                    + "WHERE recDate = ? and patient_patId_fk = ? ";
-            PreparedStatement pstm2 = con.prepareStatement(sql);
-            pstm2.setInt(1, userId);
-            pstm2.setDate(2, new java.sql.Date(d.getTime()));
-            int rs2 = pstm.executeUpdate();
-        }catch (SQLException e){
-            System.out.println(e);
         }
         return dia;
-    } 
-    public static Dialysis showRecord(int userId, Date d) { //show record after click date
+    }
+    public static Dialysis showRecordAll(int userId, Date d ,int round) { //show record after click date
         Dialysis dia = null;
+        Connection con = null;
         try {
-            Connection con = ConnectionBuilder.getConnection();
-            String sql = "select volDiaIn , timeDiaIn_start,timeDiaIn_end ,intensity, record_recId_fk "
+            con = ConnectionBuilder.getConnection();
+            String sql = "select * "
                     + "from dialysis JOIN record ON dialysis.record_recId_fk = record.recId "
                     + "JOIN patient ON record.patient_patId_fk = patient.patId "
-                    + "WHERE patId = ? and recDate = ? ";
+                    + "WHERE patId = ? and recDate = ? and recRound = ? ";
             PreparedStatement pstm = con.prepareStatement(sql);
             pstm.setInt(1, userId);
             pstm.setDate(2, new java.sql.Date(d.getTime()));
+            pstm.setInt(3, round);
+            ResultSet rs = pstm.executeQuery();
+            if (rs.next()) {
+                dia = new Dialysis();
+                dia.setTimeDiaIn_start(rs.getTime("timeDiaIn_start"));
+                dia.setTimeDiaIn_end(rs.getTime("timeDiaIn_end"));
+                dia.setVolDiaIn(rs.getInt("volDiaIn"));
+                dia.setIntensity(rs.getDouble("intensity"));
+                dia.setRound_Id(rs.getInt("record_recId_fk"));
+                dia.setTimeDiaOut_start(rs.getTime("timeDiaOut_start"));
+                dia.setTimeDiaOut_end(rs.getTime("timeDiaOut_end"));
+                dia.setVolDiaOut(rs.getInt("volDiaOut"));
+                dia.setDesDiaLiquid(rs.getString("desDiaLiquid"));
+                dia.setIntensity(rs.getDouble("intensity"));
+                dia.setUrinate(rs.getInt("urinate"));
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+
+        }
+        return dia;
+    }
+    public static Dialysis showRecord(int userId, Date d ,int round) { //show record after click date
+        Dialysis dia = null;
+        Connection con = null;
+        try {
+            con = ConnectionBuilder.getConnection();
+            String sql = "select volDiaIn , timeDiaIn_start,timeDiaIn_end ,intensity, record_recId_fk "
+                    + "from dialysis JOIN record ON dialysis.record_recId_fk = record.recId "
+                    + "JOIN patient ON record.patient_patId_fk = patient.patId "
+                    + "WHERE patId = ? and recDate = ? and recRound = ? ";
+            PreparedStatement pstm = con.prepareStatement(sql);
+            pstm.setInt(1, userId);
+            pstm.setDate(2, new java.sql.Date(d.getTime()));
+            pstm.setInt(3, round);
             ResultSet rs = pstm.executeQuery();
             if (rs.next()) {
                 dia = new Dialysis();
@@ -247,18 +412,29 @@ public class Dialysis {
                 dia.setIntensity(rs.getDouble("intensity"));
                 dia.setRound_Id(rs.getInt("record_recId_fk"));
             }
+
         } catch (SQLException e) {
             System.out.println(e);
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+
         }
         return dia;
     }
 
     public static List<Dialysis> showRecordTable(int userId) { // show all in table
         List<Dialysis> diaAll = null;
+        Connection con = null;
         try {
-            Connection con = ConnectionBuilder.getConnection();
+            con = ConnectionBuilder.getConnection();
             String sql = "select volDiaIn , timeDiaIn_start,timeDiaIn_end ,volDiaOut,timeDiaOut_start, "
-                    + " timeDiaOut_end, profit , urinate , totalProfit ,desDiaLiquid "
+                    + " timeDiaOut_end, profit , urinate , totalProfit ,desDiaLiquid ,intensity "
                     + " , recDate , recRound "
                     + " from dialysis join record on dialysis.record_recId_fk = record.recId "
                     + " join patient on record.patient_patId_fk = patient.patId "
@@ -281,7 +457,7 @@ public class Dialysis {
                 dia.setDesDiaLiquid(rs.getString("desDiaLiquid"));
                 dia.setDate(rs.getDate("recDate"));
                 dia.setRound(rs.getInt("recRound"));
-
+                dia.setIntensity(rs.getDouble("intensity"));
                 if (diaAll == null) {
                     diaAll = new ArrayList<>();
                 }
@@ -289,12 +465,23 @@ public class Dialysis {
                 diaAll.add(dia);
 
             }
+
         } catch (SQLException e) {
             System.out.println(e);
+
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
 
         }
         return diaAll;
     }
+  
 
     public int getRound() {
         return round;

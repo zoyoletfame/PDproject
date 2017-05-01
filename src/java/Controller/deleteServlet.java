@@ -5,8 +5,14 @@
  */
 package Controller;
 
+import Model.Dialysis;
+import Model.TestDateTime;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +36,28 @@ public class deleteServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        Object Id = request.getSession().getAttribute("userId");
+        String recDate = request.getParameter("date");
        
+        try {
+            SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy");
+            String dateBack = TestDateTime.changeDateBack(recDate);
+            Date date = s.parse(dateBack);
+            int userIds = Integer.parseInt(Id.toString());
+            List<TestDateTime> recordId = TestDateTime.getRoundValue(userIds, date);
+            Dialysis.deleteDialysis(recordId);
+            Dialysis.deleteDate(userIds, date);
+            List<TestDateTime> showAllDate = TestDateTime.showDateAll(userIds); 
+             List<TestDateTime> roundMax = TestDateTime.getRoundMaxList(userIds, showAllDate);
+            request.setAttribute("showDate", TestDateTime.chageDateList(showAllDate,roundMax));
+          
+            getServletContext().getRequestDispatcher("/Home.jsp").forward(request, response);
+        } catch (NumberFormatException e) {
+            System.out.println(e);
+        } catch (ParseException e) {
+            System.out.println(e);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

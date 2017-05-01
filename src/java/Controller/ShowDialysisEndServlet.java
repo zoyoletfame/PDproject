@@ -9,6 +9,7 @@ import Model.Dialysis;
 import Model.TestDateTime;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,29 +37,34 @@ public class ShowDialysisEndServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
         Object userId = request.getSession().getAttribute("userId");
-        String roundId = request.getParameter("roundId");
-        
-        try{       
-            int rId = Integer.parseInt(roundId);
-            int userID = Integer.parseInt(userId.toString());   
-            
-            TestDateTime td = TestDateTime.showDate(userID,rId);
-            Dialysis dia = Dialysis.showRecord(userID,td.getDate());  
-            request.setAttribute("rId", roundId);
-            request.setAttribute("dates", td.getDate()); 
-            
+        String date = request.getParameter("dateLoop");
+        try {
+            SimpleDateFormat f = new SimpleDateFormat("dd-MM-yyyy");
+            String dateback = TestDateTime.changeDateBack(date);
+            Date dateParse = f.parse(dateback);
+           
+            int userID = Integer.parseInt(userId.toString());
+            TestDateTime roundMax = TestDateTime.getRoundMax(userID, dateParse);
+            Dialysis dia = Dialysis.showRecord(userID, dateParse, roundMax.getRound()); 
+           
+            request.setAttribute("dateValue", dateback); 
+            request.setAttribute("dates", date);
+            request.setAttribute("rounds", roundMax.getRound());
             request.setAttribute("volIn", dia.getVolDiaIn());
             request.setAttribute("timeIn_start", dia.getTimeDiaIn_start());
             request.setAttribute("timeIn_end", dia.getTimeDiaIn_end());
             request.setAttribute("intensity", dia.getIntensity());
-            // set round ไปหน้า record Dialysis         
-          
+            // set round ไปหน้า record Dialysis    
+
             getServletContext().getRequestDispatcher("/recordDialysis.jsp").forward(request, response);
-        }catch(NumberFormatException e){
+        } catch (NumberFormatException e) {
+            System.out.println(e);
+        }catch(ParseException e){
             System.out.println(e);
         }
-       
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

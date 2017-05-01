@@ -40,6 +40,14 @@
         <servlet-name>deleteServlet</servlet-name>
         <servlet-class>Controller.deleteServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ResolveServlet</servlet-name>
+        <servlet-class>Controller.ResolveServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>resolveRecordServlet</servlet-name>
+        <servlet-class>Controller.resolveRecordServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>DialysisServlet</servlet-name>
         <url-pattern>/DialysisServlet</url-pattern>
@@ -80,9 +88,20 @@
         <servlet-name>deleteServlet</servlet-name>
         <url-pattern>/deleteServlet</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ResolveServlet</servlet-name>
+        <url-pattern>/ResolveServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>resolveRecordServlet</servlet-name>
+        <url-pattern>/resolveRecordServlet</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
+    <welcome-file-list>
+        <welcome-file>Login.jsp</welcome-file>
+    </welcome-file-list>
 </web-app>
