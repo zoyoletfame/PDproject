@@ -29,7 +29,6 @@
                 <a href="resolveRecordServlet?dateLoop=${showBack.thaiDate}&maxRound=${showBack.round}">แก้ไข</a>  
                 <a href="deleteServlet?date=${showBack.thaiDate}">ลบ</a>
 
-famefmaemfmamefemfamefmef
                 <%--      <c:choose>
                                   <c:when test = "${showBack==showBack}">
                                     
